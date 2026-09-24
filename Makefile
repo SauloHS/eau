@@ -3,12 +3,12 @@ LD := ld
 
 CFLAGS := -std=gnu11 -ffreestanding -fno-stack-protector -fno-stack-check \
           -fno-pie -fno-pic -m64 -march=x86-64 -mno-80387 -mno-mmx \
-          -mno-sse -mno-sse2 -mno-red-zone -mcmodel=kernel -Wall -Wextra
+          -mno-sse -mno-sse2 -mno-red-zone -mcmodel=kernel -Wall -Wextra -I.
 
 LDFLAGS := -m elf_x86_64 -nostdlib -static -no-pie \
            -T linker.ld -z max-page-size=0x1000
 
-SRC := src/kernel.c
+SRC := $(shell find src drivers utils -name '*.c')
 OBJ := $(SRC:.c=.o)
 
 KERNEL := kernel
@@ -41,7 +41,7 @@ iso: $(KERNEL)
 	./limine/limine bios-install eau.iso
 
 run: iso
-	qemu-system-x86_64 -cdrom eau.iso -m 512M
+	qemu-system-x86_64 -cdrom eau.iso -m 512M -serial stdio
 
 clean:
 	rm -rf $(OBJ) $(KERNEL) iso_root eau.iso

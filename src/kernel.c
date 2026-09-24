@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "limine.h"
+#include "drivers/serial/com1.h"
 
 
 // Defines limine protocol revision 6
@@ -18,12 +19,16 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 
 // kernel entry point
 void kmain(void) {
+  serial_init();
+  serial_write("EauOS booting\n");
   if (framebuffer_request.response == NULL) {
     // no response from framebuffer request; halt here
     for (;;) {
       asm("hlt");
     }
   }
+
+  serial_write("Framebuffer response NOT NULL\n");
   
   // getting only first framebuffer
   // FIXME: this only gets first framebuffer; if there is more than one monitor, probably smt will go wrong
@@ -37,6 +42,8 @@ void kmain(void) {
       *pixel = 0x0000FF;
     }
   }
+
+  serial_write("Screen should be blue\n");
   
   // nothing more to do
   for (;;) {
