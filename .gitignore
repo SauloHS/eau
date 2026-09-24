@@ -1,0 +1,8 @@
+# build artifacts
+*.o
+kernel
+eau.iso
+iso_root/
+
+# limine binaries
+limine/
