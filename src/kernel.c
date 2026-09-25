@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "limine.h"
 #include "drivers/serial/com1.h"
+#include "cpu/gdt.h"
 
 
 // Defines limine protocol revision 6
@@ -19,6 +20,8 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 
 // kernel entry point
 void kmain(void) {
+  gdt_load();
+  gdt_reload_segments();
   serial_init();
   serial_write("EauOS booting\n");
   if (framebuffer_request.response == NULL) {

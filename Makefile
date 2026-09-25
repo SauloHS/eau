@@ -8,7 +8,7 @@ CFLAGS := -std=gnu11 -ffreestanding -fno-stack-protector -fno-stack-check \
 LDFLAGS := -m elf_x86_64 -nostdlib -static -no-pie \
            -T linker.ld -z max-page-size=0x1000
 
-SRC := $(shell find src drivers utils -name '*.c')
+SRC := $(shell find src drivers utils cpu -name '*.c')
 OBJ := $(SRC:.c=.o)
 
 KERNEL := kernel
